@@ -1,19 +1,35 @@
-import { ListRenderItem, StyleSheet, Text, View, Image } from "react-native";
+import {
+  ListRenderItem,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Pressable,
+} from "react-native";
 import { IInventoryItem } from "../network/types";
+import { colors } from "../theme/colors";
 import { fonts } from "../theme/fonts";
 import { currencyFormat } from "../utils";
-import AddButton from "./AddButton";
 
 export const InventoryItem: ListRenderItem<IInventoryItem> = (props) => {
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: props.item.photo }} style={styles.image} />
-      <Text style={styles.title}>{props.item.name}</Text>
-      <Text style={styles.title}>
-        {currencyFormat(props.item.purchasePrice)}
-      </Text>
-      {/* {props.onButtonPress? <AddButton onPress={props.onButtonPress} /> : null} */}
-    </View>
+    <Pressable
+      style={({ pressed }) => [
+        { opacity: pressed ? 0.5 : 1 },
+        styles.container,
+      ]}
+      // TODO: clarify what can we do by press. show details or remove?
+      //   onPress={() => {}}
+      pressRetentionOffset={10}
+    >
+      <Image style={styles.image} source={{ uri: props.item.photo }} />
+      <View style={styles.titleContainer}>
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode='tail'>{props.item.name}</Text>
+        <Text style={styles.currencyTitle}>
+          {currencyFormat(props.item.purchasePrice)}
+        </Text>
+      </View>
+    </Pressable>
   );
 };
 
@@ -21,6 +37,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
+    elevation: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -29,25 +46,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 20,
     borderRadius: 25,
-    overflow: 'hidden',
+    overflow: "hidden",
+    backgroundColor: colors.white,
   },
   image: {
-    height: 200,
-    // width: 305,
-    // height: 159,
-  },
-  title: {
-    fontFamily: fonts.regular,
-    fontSize: 34,
-    lineHeight: 42,
+    height: 150,
   },
   titleContainer: {
-    width: "100%",
-    height: 42,
-    marginTop: 99,
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    padding: 20,
+  },
+  title: {
+    fontFamily: fonts.bold,
+    minHeight: 56,
+    fontSize: 28,
+  },
+  currencyTitle: {
+    fontFamily: fonts.regular,
+    fontSize: 22,
   },
 });
