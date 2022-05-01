@@ -7,8 +7,8 @@ import { ActivityIndicator } from 'react-native';
 
 export default function App() {
     const [fontsLoaded] = useFonts({
-      [fonts.regular]: "https://fonts.cdnfonts.com/s/15011/CircularStd-Medium.woff",
-      [fonts.bold]: "https://fonts.cdnfonts.com/s/15011/CircularStd-Bold.woff",
+      [fonts.regular]: require('./assets/fonts/CircularStd-Medium.ttf'),
+      [fonts.bold]:  require('./assets/fonts/CircularStd-Bold.ttf'),
     });
     if(!fontsLoaded) return <ActivityIndicator size="large" style={{justifyContent: 'center', flex: 1}} />
     return (
