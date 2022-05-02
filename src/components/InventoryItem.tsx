@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   ListRenderItem,
   StyleSheet,
@@ -12,19 +13,26 @@ import { fonts } from "../theme/fonts";
 import { currencyFormat } from "../utils";
 
 export const InventoryItem: ListRenderItem<IInventoryItem> = (props) => {
+  const navigation = useNavigation();
+
   return (
     <Pressable
       style={({ pressed }) => [
         { opacity: pressed ? 0.5 : 1 },
         styles.container,
       ]}
-      // TODO: clarify what can we do by press. show details or remove?
-      //   onPress={() => {}}
+      onPress={() => {
+        navigation.navigate("AddItem", {
+          itemId: props.item.id,
+        });
+      }}
       pressRetentionOffset={10}
     >
       <Image style={styles.image} source={{ uri: props.item.photo }} />
       <View style={styles.titleContainer}>
-        <Text style={styles.title} numberOfLines={2} ellipsizeMode='tail'>{props.item.name}</Text>
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+          {props.item.name}
+        </Text>
         <Text style={styles.currencyTitle}>
           {currencyFormat(props.item.purchasePrice)}
         </Text>
@@ -58,7 +66,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.bold,
     minHeight: 56,
-    fontSize: 28,
+    fontSize: 25,
   },
   currencyTitle: {
     fontFamily: fonts.regular,

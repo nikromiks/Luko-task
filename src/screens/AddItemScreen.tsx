@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { RouteProp, useRoute } from "@react-navigation/native";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 
 import Button from "../components/Button";
@@ -6,17 +7,27 @@ import { CurrencyInput } from "../components/CurrencyInput";
 import { Input } from "../components/Input";
 import { MultilineInput } from "../components/MultilineInput";
 import { Photo } from "../components/Photo";
-import { RootTabScreenProps } from "../navigation/types";
+import { RootStackParamList, RootTabScreenProps } from "../navigation/types";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { add, save } from "../store/inventorySlice";
 import { colors } from "../theme/colors";
 import { fonts } from "../theme/fonts";
+
+type ProfileScreenRouteProp = RouteProp<RootStackParamList, "AddItem">;
 
 export default function AddItemScreen({
   navigation,
 }: RootTabScreenProps<"AddItemScreen">) {
-  const [image, setImage] = useState<string>();
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [description, setDescription] = useState("");
+  const dispatch = useAppDispatch();
+  const { params } = useRoute<ProfileScreenRouteProp>();
+  const item = useAppSelector((state) =>
+    state.inventory.data.find((item) => item.id === params?.itemId)
+  );
+
+  const [image, setImage] = useState<string | undefined>(item?.photo);
+  const [name, setName] = useState(item?.name ?? "");
+  const [amount, setAmount] = useState(String(item?.purchasePrice || ""));
+  const [description, setDescription] = useState(item?.description || "");
 
   const isAddDisabled = !image || !name || !amount;
 
@@ -29,9 +40,31 @@ export default function AddItemScreen({
   const onChangeAmount = (newAmount: string) => {
     setAmount(newAmount);
   };
-  const onAddItem = () => {
-    // TODO: save
-    navigation.goBack();
+  const handleSave = () => {
+    if (image) {
+      if (item) {
+        dispatch(
+          save({
+            ...item,
+            name,
+            photo: image,
+            purchasePrice: Number.parseInt(amount),
+            description,
+          })
+        );
+      } else {
+        dispatch(
+          add({
+            name,
+            photo: image,
+            purchasePrice: Number.parseInt(amount),
+            description,
+          })
+        );
+      }
+
+      navigation.goBack();
+    }
   };
 
   // TODO: catch focus change
@@ -39,7 +72,11 @@ export default function AddItemScreen({
     <ScrollView style={styles.container}>
       <View style={styles.buttonsContainer}>
         <Button title="Cancel" onPress={() => navigation.goBack()} />
-        <Button title="Add" disabled={isAddDisabled} onPress={onAddItem} />
+        <Button
+          title={item ? "Save" : "Add"}
+          disabled={isAddDisabled}
+          onPress={handleSave}
+        />
       </View>
       <Photo
         style={styles.photo}
