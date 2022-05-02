@@ -34,12 +34,12 @@ export default function AddItemScreen({
   };
 
   useEffect(() => {
-    if (name && amount) {
+    if (image && name && amount) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [name, amount]);
+  }, [image, name, amount]);
 
   // TODO: catch focus change
   return (
