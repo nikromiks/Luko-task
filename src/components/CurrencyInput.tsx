@@ -15,7 +15,7 @@ export const CurrencyInput = ({
   currency?: string;
 }) => {
   return (
-    <Input {...props} maxLength={5}> 
+    <Input {...props} maxLength={5} keyboardType={'numeric'}> 
      {currency ? <Text style={styles.currencyTitle}>{currency}</Text> : null}
     </Input>
   );

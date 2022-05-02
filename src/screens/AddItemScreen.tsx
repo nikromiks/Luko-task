@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View, Text } from "react-native";
 
 import Button from "../components/Button";
@@ -13,7 +13,11 @@ import { fonts } from "../theme/fonts";
 export default function AddItemScreen({
   navigation,
 }: RootTabScreenProps<"AddItemScreen">) {
+  const [disabled, setDisabled] = useState(true);
   const [image, setImage] = useState<string>();
+  const [name, setName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
 
   const onChangeImage = (newImage: string) => {
     setImage(newImage);
@@ -21,12 +25,28 @@ export default function AddItemScreen({
   const onDeleteImage = () => {
     setImage(undefined);
   };
+  const onChangeAmount = (newAmount: string) => {
+    setAmount(newAmount);
+  };
+  const onAddItem = () => {
+    // TODO: save
+    navigation.goBack();
+  };
 
+  useEffect(() => {
+    if (name && amount) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [name, amount]);
+
+  // TODO: catch focus change
   return (
     <ScrollView style={styles.container}>
       <View style={styles.buttonsContainer}>
         <Button title="Cancel" onPress={() => navigation.goBack()} />
-        <Button title="Add" disabled onPress={() => undefined} />
+        <Button title="Add" disabled={disabled} onPress={onAddItem} />
       </View>
       <Photo
         style={styles.photo}
@@ -37,21 +57,24 @@ export default function AddItemScreen({
       <Input
         style={styles.input}
         title="Name"
-        value=""
+        value={name}
+        onChangeText={setName}
         placeholder="Name"
         maxLength={160}
       />
       <CurrencyInput
         style={styles.input}
         title="Value"
-        value=""
+        value={amount}
+        onChangeText={onChangeAmount}
         placeholder="Max 40,000"
         currency="€"
       />
       <MultilineInput
         style={styles.input}
         title="Description"
-        value=""
+        value={description}
+        onChangeText={setDescription}
         placeholder="Optional"
       />
     </ScrollView>
