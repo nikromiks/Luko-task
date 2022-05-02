@@ -13,11 +13,12 @@ import { fonts } from "../theme/fonts";
 export default function AddItemScreen({
   navigation,
 }: RootTabScreenProps<"AddItemScreen">) {
-  const [disabled, setDisabled] = useState(true);
   const [image, setImage] = useState<string>();
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
+
+  const isAddDisabled = !image || !name || !amount;
 
   const onChangeImage = (newImage: string) => {
     setImage(newImage);
@@ -33,20 +34,12 @@ export default function AddItemScreen({
     navigation.goBack();
   };
 
-  useEffect(() => {
-    if (image && name && amount) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [image, name, amount]);
-
   // TODO: catch focus change
   return (
     <ScrollView style={styles.container}>
       <View style={styles.buttonsContainer}>
         <Button title="Cancel" onPress={() => navigation.goBack()} />
-        <Button title="Add" disabled={disabled} onPress={onAddItem} />
+        <Button title="Add" disabled={isAddDisabled} onPress={onAddItem} />
       </View>
       <Photo
         style={styles.photo}
