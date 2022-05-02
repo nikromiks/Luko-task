@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, Text } from "react-native";
 
 import Button from "../components/Button";
+import { CurrencyInput } from "../components/CurrencyInput";
+import { Input } from "../components/Input";
+import { MultilineInput } from "../components/MultilineInput";
 import { Photo } from "../components/Photo";
 import { RootTabScreenProps } from "../navigation/types";
 import { colors } from "../theme/colors";
+import { fonts } from "../theme/fonts";
 
 export default function AddItemScreen({
   navigation,
@@ -19,7 +23,7 @@ export default function AddItemScreen({
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.buttonsContainer}>
         <Button title="Cancel" onPress={() => navigation.goBack()} />
         <Button title="Add" disabled onPress={() => undefined} />
@@ -30,7 +34,27 @@ export default function AddItemScreen({
         onImageChanged={onChangeImage}
         onDeleteImage={onDeleteImage}
       />
-    </View>
+      <Input
+        style={styles.input}
+        title="Name"
+        value=""
+        placeholder="Name"
+        maxLength={160}
+      />
+      <CurrencyInput
+        style={styles.input}
+        title="Value"
+        value=""
+        placeholder="Max 40,000"
+        currency="€"
+      />
+      <MultilineInput
+        style={styles.input}
+        title="Description"
+        value=""
+        placeholder="Optional"
+      />
+    </ScrollView>
   );
 }
 
@@ -52,5 +76,12 @@ const styles = StyleSheet.create({
   photo: {
     alignSelf: "center",
     marginTop: 24,
+  },
+  input: {
+    marginVertical: 10,
+  },
+  currencyTitle: {
+    fontFamily: fonts.regular,
+    fontSize: 20,
   },
 });
