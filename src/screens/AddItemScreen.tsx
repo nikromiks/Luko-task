@@ -31,39 +31,24 @@ export default function AddItemScreen({
 
   const isAddDisabled = !image || !name || !amount;
 
-  const onChangeImage = (newImage: string) => {
-    setImage(newImage);
-  };
-  const onDeleteImage = () => {
-    setImage(undefined);
-  };
-  const onChangeAmount = (newAmount: string) => {
-    setAmount(newAmount);
-  };
   const handleSave = () => {
     if (image) {
+      const newItem = {
+        name,
+        photo: image,
+        purchasePrice: Number.parseInt(amount),
+        description,
+      };
       if (item) {
         dispatch(
           save({
             ...item,
-            name,
-            photo: image,
-            purchasePrice: Number.parseInt(amount),
-            description,
+            ...newItem,
           })
         );
       } else {
-        dispatch(
-          add({
-            name,
-            photo: image,
-            purchasePrice: Number.parseInt(amount),
-            description,
-          })
-        );
+        dispatch(add(newItem));
       }
-
-      navigation.goBack();
     }
   };
 
@@ -81,8 +66,7 @@ export default function AddItemScreen({
       <Photo
         style={styles.photo}
         image={image}
-        onImageChanged={onChangeImage}
-        onDeleteImage={onDeleteImage}
+        onImageChanged={setImage}
       />
       <Input
         style={styles.input}
@@ -96,8 +80,8 @@ export default function AddItemScreen({
         style={styles.input}
         title="Value"
         value={amount}
-        onChangeText={onChangeAmount}
-        placeholder="Max 40,000"
+        onChangeText={setAmount}
+        placeholder="Max 40,000 total"
         currency="€"
       />
       <MultilineInput

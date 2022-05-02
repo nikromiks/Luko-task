@@ -12,7 +12,7 @@ export const mockInventory: IInventoryItem[] = [
   {
     id: 2,
     name: "Guitar",
-    purchasePrice: 40000,
+    purchasePrice: 30000,
     type: "MUSIC_INSTRUMENT",
     photo: "https://i.ibb.co/4dfndL2/louis-hansel-M-d-J-Scwa-LE-unsplash.jpg",
   },

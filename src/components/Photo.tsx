@@ -13,21 +13,20 @@ import DeleteButton from "./DeleteButton";
 import { ImagePicker } from "../sdk/ImagePicker";
 
 export const Photo = (props: {
-  onImageChanged?: (source: string) => void;
-  onDeleteImage?: () => void;
+  onImageChanged?: (source?: string) => void;
   style?: StyleProp<ViewStyle>;
   image?: string;
 }) => {
   const onContainerPress = async () => {
     // TODO: show modal window to choose: from gallery or from camera
-    let result = await ImagePicker.pickImage();
+    let result = await ImagePicker.photoPickerAlert();
 
     if (result && !result.cancelled) {
       props.onImageChanged && props.onImageChanged(result.uri);
     }
   };
   const onPressDelete = () => {
-    props.onDeleteImage && props.onDeleteImage();
+    props.onImageChanged && props.onImageChanged(undefined);
   };
 
   const renderImage = () => (

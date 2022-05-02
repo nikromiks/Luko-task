@@ -20,10 +20,11 @@ import {
 import { colors } from "../theme/colors";
 import { fonts } from "../theme/fonts";
 import { Title } from "../components/Title";
+import { navigationRef } from './root';
 
 export default function Navigation() {
   return (
-    <NavigationContainer theme={DefaultTheme}>
+    <NavigationContainer theme={DefaultTheme} ref={navigationRef}>
       <RootNavigator />
     </NavigationContainer>
   );
